@@ -1,7 +1,6 @@
-const getBreweriesHelper = require('../helpers/getBreweriesHelper');
+const getBreweriesHelper = require("../helpers/getBreweriesHelper");
 
-module.exports = async () => {
-    const response = await getBreweriesHelper();
-    console.log('1')
-    return response;
+module.exports = async (id) => {
+    if(id) return await getBreweriesHelper(id);
+    return await getBreweriesHelper();
 }

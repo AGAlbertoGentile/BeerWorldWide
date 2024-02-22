@@ -1,13 +1,12 @@
 const axios = require('axios');
-const URL = 'https://api.openbrewerydb.org/breweries'
+const baseUrl = 'https://api.openbrewerydb.org/v1/breweries'
 
-module.exports = async () => {
+module.exports = async (id) => {
     try {
-        const breweries = await axios.get(URL);
-        console.log("Llamado a API externa realizando con exito");
+        const url = id ? `${baseUrl}/${id}` : baseUrl;
+        const breweries = await axios.get(url);
         return breweries.data;
     } catch (error) {
-        console.error('Error with api call')
         throw new Error(error.message);
     }
 }
