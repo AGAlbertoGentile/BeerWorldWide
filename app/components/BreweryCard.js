@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function BreweryCard ({ brewery, onPress }) {
+
+    const [isFavorite, setIsFavorite] = useState(false);
+    
     return(
         <TouchableOpacity onPress={onPress} style={styles.card}>
             <Text style={styles.title}>{brewery.name}</Text>
