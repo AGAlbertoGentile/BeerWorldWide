@@ -1,31 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { getBreweryDetails } from "../utils/api";
+import CustomButton from "../components/CustomButton";
 
 export default function BreweryDetailsScreen({ navigation, route }) {
 
-    const { id } = route.params;
+    const { breweryId } = route.params;
 
-    const [brewery, setBrewery] = useState({});
+    const [brewery, setBrewery] = useState(null);
     const [error, setError] = useState('');
 
     useEffect (() => {
         const loadingDetailBrewery = async () => {
             try {
-                const brewery = await getBreweryDetail(id);
-                setBrewery(brewery)
+                const breweryDetails = await getBreweryDetails(breweryId);
+                setBrewery(breweryDetails)
             } catch (error) {
-                setError('Error loading the detail')
+                setError('Error loading brewery details')
             }
         };
 
         loadingDetailBrewery();
-    },[id]);
+    },[breweryId]);
+
+    if(error) {
+        return <View><Text>{error}</Text></View>;
+    }
+
+    if(!brewery) {
+        return <View><Text>Loading...</Text></View>;
+    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{brewery.name}</Text>
-            <Button
-                title="Home"
+            <Text style={styles.subtitle}>{brewery.adress}</Text>
+            <Text style={styles.subtitle}>{brewery.city}, {brewery.state}</Text>
+            <Text style={styles.subtitle}>{brewery.country}</Text>
+            <Text style={styles.information}>Phone: {brewery.phone}</Text>
+            <Text style={styles.information}>Web: {brewery.website_url}</Text>
+
+            <CustomButton
+                style={styles.button}
+                title="Back"
                 onPress={() => navigation.goBack()}
             />
         </View>
@@ -41,14 +58,18 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 25,
         width: 200,
+        marginTop: 20,
     },
     title : {
-        fontSize: 40,
+        fontSize: 35,
         color: '#000',
         fontWeight: 'bold',
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 22,
     },
+    information: {
+        fontSize: 15,
+    }
 
 });

@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import CustomButton from '../components/CustomButton';
 
 export default function WelcomeScreen({ navigation }) {
     return(
         <View style={styles.container}>
             <Text style={styles.title}>Hello</Text>
             <Text style={styles.subtitle}>Welcome to the Breweries World Tour</Text>
-            <Button
-                style={styles.button}
+            <CustomButton
                 title="Enter"
                 onPress={() => navigation.navigate('Home')}
             />
@@ -21,9 +21,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    button: {
-        borderRadius: 25,
     },
     title : {
         fontSize: 40,
