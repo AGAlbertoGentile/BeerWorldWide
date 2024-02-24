@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     button: {
         paddingVertical: 10,
         paddingHorizontal: 20,
-        borderRadius: 25, // borderRadius para el gradiente
+        borderRadius: 25,
     },
     text: {
         color: '#ffffff',

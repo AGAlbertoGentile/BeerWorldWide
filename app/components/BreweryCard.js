@@ -1,23 +1,16 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, TouchableOpacity, View, ImageBackground } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function BreweryCard ({ brewery, onPress }) {
 
     
     return(
-        <ImageBackground 
-            source={require('../assets/background-2.png')} // Asegúrate de cambiar esto por la ruta real de tu imagen
-            style={styles.background}
-            imageStyle={{ opacity: 0.1 }}
-            resizeMode="cover"
-        >
         <View>
-            <TouchableOpacity onPress={onPress} style={styles.card}>
+            <TouchableOpacity onPress={onPress} style={styles.card} activeOpacity={0.8}>
                 <Text style={styles.title}>{brewery.name}</Text>
                 <Text style={styles.subtitle}>{brewery.city}, {brewery.state}</Text>
             </TouchableOpacity>
         </View>
-        </ImageBackground>
     );
 };
 
@@ -36,6 +29,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        width:350
     },
     title: {
         fontSize: 18,

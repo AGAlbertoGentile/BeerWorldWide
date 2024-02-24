@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ActivityIndicator, ImageBackground } from 'react-native';
 import { getAllBreweries } from "../utils/api";
 import { FlatList, TextInput } from "react-native-gesture-handler";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import BreweryCard from '../components/BreweryCard';
 import CustomButton from "../components/CustomButton";
 import CustomSwitch from "../components/CustomSwitch";
+import CustomArrowButton from "../components/CustomButtonArrow";
 
 export default function HomeScreen({ navigation }) {
 
@@ -14,6 +16,7 @@ export default function HomeScreen({ navigation }) {
     const [searchText, setSearchText] = useState('');
     const [isFilteredByCity, setIsFilteredByCity] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
 
     const loadingAllBreweries = async () => {
         try {
@@ -28,15 +31,36 @@ export default function HomeScreen({ navigation }) {
         loadingAllBreweries();
     },[]);
 
+    const maxPages = (allBreweries.length / 4);
+
+
     const filteredBreweries = allBreweries.filter( brewery => 
         isFilteredByCity
             ? brewery.city.toLowerCase().includes(searchText.toLowerCase())
             : brewery.name.toLowerCase().includes(searchText.toLowerCase())
     );
 
+    const breweriesPerPage = 4;
+    const maxIndex = currentPage * breweriesPerPage;
+    const minIndex = maxIndex - breweriesPerPage;
+    const currentView = filteredBreweries?.slice(minIndex, maxIndex);
+    const maxNumOfPage = Math.ceil(filteredBreweries.length / breweriesPerPage);
+
+    const handleNext = () => {
+        if (currentPage < maxNumOfPage) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <ImageBackground 
-            source={require('../assets/background-2.png')} // Asegúrate de cambiar esto por la ruta real de tu imagen
+            source={require('../assets/background-2.png')}
             style={styles.background}
             imageStyle={{ opacity: 0.08 }}
             resizeMode="cover"
@@ -57,7 +81,7 @@ export default function HomeScreen({ navigation }) {
                 <Text>{error}</Text>
             ) : (
                 <FlatList
-                    data={filteredBreweries}
+                    data={currentView}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
                         <BreweryCard
@@ -67,6 +91,11 @@ export default function HomeScreen({ navigation }) {
                     )}
                 />
             )}
+            <View style={styles.pagination}>
+                <CustomArrowButton title="<" onPress={handlePrevious} />
+                <Text style={styles.pagination}>{`${currentPage} of ${maxNumOfPage}`}</Text>
+                <CustomArrowButton title=">" onPress={handleNext} />
+            </View>
             <CustomButton
                 title="Exit"
                 onPress={() => navigation.navigate('WelcomeView')}
@@ -105,7 +134,7 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderRadius: 50,
         margin: 10,
-        width: '80%',
+        width: '85%',
         // Sombra para iOS
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 2 },
@@ -121,5 +150,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center', 
     },
-
+    pagination: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
 });

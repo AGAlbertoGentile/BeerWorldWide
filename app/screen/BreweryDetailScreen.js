@@ -33,7 +33,7 @@ export default function BreweryDetailsScreen({ navigation, route }) {
         <ImageBackground 
             source={require('../assets/background-2.png')} // Asegúrate de cambiar esto por la ruta real de tu imagen
             style={styles.background}
-            imageStyle={{ opacity: 0.08 }}
+            imageStyle={{ opacity: 0.06 }}
             resizeMode="cover"
         >
         <View style={styles.container}>
