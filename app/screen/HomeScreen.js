@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, ImageBackground } from 'react-native';
 import { getAllBreweries } from "../utils/api";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import BreweryCard from '../components/BreweryCard';
@@ -14,16 +14,17 @@ export default function HomeScreen({ navigation }) {
     const [searchText, setSearchText] = useState('');
     const [isFilteredByCity, setIsFilteredByCity] = useState(false);
 
-    useEffect (() => {
-        const loadingAllBreweries = async () => {
-            try {
-                const allBreweries = await getAllBreweries();
-                setAllBreweries(allBreweries)
-            } catch (error) {
-                setError('Error loading all the breweries')
-            }
-        };
 
+    const loadingAllBreweries = async () => {
+        try {
+            const allBreweries = await getAllBreweries();
+            setAllBreweries(allBreweries)
+        } catch (error) {
+            setError('Error loading all the breweries')
+        }
+    };
+
+    useEffect (() => {
         loadingAllBreweries();
     },[]);
 
@@ -34,7 +35,14 @@ export default function HomeScreen({ navigation }) {
     );
 
     return (
+        <ImageBackground 
+            source={require('../assets/background-2.png')} // Asegúrate de cambiar esto por la ruta real de tu imagen
+            style={styles.background}
+            imageStyle={{ opacity: 0.08 }}
+            resizeMode="cover"
+        >
         <View style={styles.container}>
+            {!allBreweries && <View style={styles.loading}><ActivityIndicator size="large" color='#0000ff'/></View>}
             <CustomSwitch
                 isFilteredByCity={isFilteredByCity}
                 setIsFilteredByCity={setIsFilteredByCity}
@@ -64,10 +72,14 @@ export default function HomeScreen({ navigation }) {
                 onPress={() => navigation.navigate('WelcomeView')}
             />
         </View>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+      },
     container: {
       flex: 1, 
       alignItems: 'center',
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
         width: 200,
     },
     title : {
-        fontSize: 40,
+        fontSize: 25,
         color: '#000',
         fontWeight: 'bold',
     },
@@ -89,19 +101,25 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: 16,
         backgroundColor: '#fff',
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 5,
+        borderColor: '#000',
+        borderWidth: 3,
+        borderRadius: 50,
         margin: 10,
-        width: '95%',
+        width: '80%',
         // Sombra para iOS
         shadowColor: '#000',
-        shadowOffset: { width: -2, height: -2 },
-        shadowOpacity: 0.1,
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.8,
         shadowRadius: 1,
     },
-    checkBox: {
+    checkBox: { 
         margin: 8,
+    },
+    loading: {
+        flex: 1,
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center', 
     },
 
 });

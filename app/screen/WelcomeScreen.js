@@ -1,11 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import CustomButton from '../components/CustomButton';
 
 export default function WelcomeScreen({ navigation }) {
     return(
         <View style={styles.container}>
-            <Text style={styles.title}>Hello</Text>
+            <Image
+                source={require('../assets/Mr.Beer.png')}
+                style={styles.image}
+            />
             <Text style={styles.subtitle}>Welcome to the Breweries World Tour</Text>
             <CustomButton
                 title="Enter"
@@ -28,7 +31,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     subtitle: {
-        fontSize: 14,
-    }
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginBottom:20,
+        textShadowColor: 'rgba(0, 0, 0, 0.15)',
+        textShadowOffset: { width: -1, height: 0 },
+        textShadowRadius: 3,
+    },
+    image: {
+        width: 250, 
+        height: 250,
+        resizeMode: 'contain',
+        marginBottom: 30,
+    },
 
 });
